@@ -7,7 +7,25 @@ import * as dotenv from 'dotenv'
 dotenv.config({ path: path.join(__dirname, '../.env') })
 
 const client = new Commando.Client({
-	owner: '634776327299399721'
+	commandPrefix: "ufweaihqr2389",
+	owner: '130136895395987456',
+	shards: "auto",
+	messageCacheLifetime: 600, 
+	messageSweepInterval: 300,
+	ws: {
+		intents: [
+			"DIRECT_MESSAGE_REACTIONS",
+			"DIRECT_MESSAGES",
+			"GUILD_BANS",
+			"GUILD_EMOJIS",
+			"GUILD_INVITES",
+			"GUILD_MEMBERS",
+			"GUILD_MESSAGE_REACTIONS",
+			"GUILD_MESSAGES",
+			"GUILD_VOICE_STATES",
+			"GUILDS"
+		]
+	}
 })
 
 client.registry
@@ -33,12 +51,20 @@ client.setProvider(
 client.on('ready', () => {
 
 	console.log('Bot running!');
-
-	(function startUpdatingStatus () {
-		client.user?.setActivity(`${client.guilds.cache.size} servers`, { type: 'WATCHING' }).catch(console.error) // update status
-		setTimeout(() => startUpdatingStatus(), 3600000) // run again in an hour
-	})()
+	console.log("Successfully connected to gateway");
+	logMemory();
+	setInterval(logMemory, 60000);
 	
+}).on("shardReady", (id) => {
+	console.log(`SHARD READY`, id);
+
 })
 
 client.login(process.env.bottoken)
+
+let counter = 1;
+
+function logMemory() {
+	console.log(`${counter} djs: Memory Usage: ${process.memoryUsage().rss / 1000000} MB djs: Members ${client.users.cache.size} Guilds: ${client.guilds.cache.size} Channels: ${client.channels.cache.size}`);
+	counter++
+}
