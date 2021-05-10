@@ -63,8 +63,9 @@ client.on('ready', () => {
 client.login(process.env.bottoken)
 
 let counter = 1;
-
 function logMemory() {
-	console.log(`${counter} djs: Memory Usage: ${process.memoryUsage().rss / 1000000} MB djs: Members ${client.users.cache.size} Guilds: ${client.guilds.cache.size} Channels: ${client.channels.cache.size}`);
-	counter++
+  const usage = process.memoryUsage();
+  const bytes = 1000000;
+  console.log(`[${counter} eris] Memory Usage RSS: ${usage.rss / bytes}MB Heap Used: ${usage.heapUsed/ bytes}MB Heap Total: ${usage.heapTotal / bytes}MB | Members ${bot.users.size} Guilds: ${bot.guilds.size}`);
+  counter++;
 }
